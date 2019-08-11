@@ -12,7 +12,8 @@ import (
 var storage services.Storage
 
 func main() {
-	handler := handlers.InitHandlers()
+	storage := services.InitDB("postgres://root:root@localhost/simple_root?sslmode=disable")
+	handler := handlers.InitHandlers(storage)
 
 	router := mux.NewRouter()
 	router.HandleFunc("/book/{id}", handler.GetBook).Methods("GET")

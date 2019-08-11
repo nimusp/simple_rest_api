@@ -26,6 +26,11 @@ func InitDB(dbURL string) Storage {
 		panic(err.Error())
 	}
 
+	err = db.Ping()
+	if err != nil {
+		panic(err.Error())
+	}
+
 	return &StorageImpl{db: db}
 }
 

@@ -24,8 +24,7 @@ type CrudHandlerImpl struct {
 	storageService services.Storage
 }
 
-func InitHandlers() CrudHandler {
-	storage := services.InitDB("postgres://root:root@localhost/simple_root?sslmode=disable")
+func InitHandlers(storage services.Storage) CrudHandler {
 	return &CrudHandlerImpl{storageService: storage}
 }
 
