@@ -41,9 +41,9 @@ func (c *CrudHandlerImpl) GetAllBooks(w http.ResponseWriter, r *http.Request) {
 
 // GET /books/{id}
 func (c *CrudHandlerImpl) GetBook(w http.ResponseWriter, r *http.Request) {
-	id, ok := mux.Vars(r)["id"]
-	if !ok {
-		w.WriteHeader(http.StatusNotFound)
+	id, isExist := mux.Vars(r)["id"]
+	if !isExist {
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
@@ -81,15 +81,16 @@ func (c *CrudHandlerImpl) AddBook(w http.ResponseWriter, r *http.Request) {
 
 // PUT /book/{id}
 func (c *CrudHandlerImpl) EditBook(w http.ResponseWriter, r *http.Request) {
+	id, isExist := mux.Vars(r)["id"]
+	if !isExist {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	var book models.Book
 	err := json.NewDecoder(r.Body).Decode(&book)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	id, ok := mux.Vars(r)["id"]
-	if !ok {
-		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
@@ -105,8 +106,8 @@ func (c *CrudHandlerImpl) EditBook(w http.ResponseWriter, r *http.Request) {
 
 // DELETE /book/{id}
 func (c *CrudHandlerImpl) DeleteBook(w http.ResponseWriter, r *http.Request) {
-	id, ok := mux.Vars(r)["id"]
-	if !ok {
+	id, isExist := mux.Vars(r)["id"]
+	if !isExist {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
